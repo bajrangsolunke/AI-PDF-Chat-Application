@@ -12,7 +12,7 @@ A production-quality RAG chat application: upload PDFs, ask questions, get strea
 | Backend | FastAPI + SQLAlchemy + SQLite + Alembic |
 | Vector DB | ChromaDB (persistent) |
 | LLM (chat) | Groq `llama-3.3-70b-versatile` (default — free, ~300 tok/s) — switchable to Gemini or OpenAI |
-| Embeddings | Google `text-embedding-004` (default — free) — switchable to OpenAI |
+| Embeddings | Google `gemini-embedding-001` (default — free) — switchable to OpenAI |
 | RAG | LangChain `RecursiveCharacterTextSplitter` + Chroma similarity search |
 | Auth | JWT (HS256), bcrypt password hashing |
 
@@ -92,7 +92,7 @@ npm run dev
 | `GROQ_CHAT_MODEL` | `llama-3.3-70b-versatile` | Groq chat model |
 | `GEMINI_API_KEY` | — (required if either provider = `gemini`) | Google AI Studio API key (free) |
 | `GEMINI_CHAT_MODEL` | `gemini-1.5-flash` | Gemini chat model |
-| `GEMINI_EMBED_MODEL` | `models/text-embedding-004` | Gemini embedding model |
+| `GEMINI_EMBED_MODEL` | `models/gemini-embedding-001` | Gemini embedding model |
 | `OPENAI_API_KEY` | — (required if either provider = `openai`) | OpenAI API key |
 | `OPENAI_CHAT_MODEL` | `gpt-4o-mini` | OpenAI chat model |
 | `OPENAI_EMBED_MODEL` | `text-embedding-3-small` | Embedding model |

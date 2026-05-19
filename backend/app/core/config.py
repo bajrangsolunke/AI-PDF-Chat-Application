@@ -41,7 +41,7 @@ class Settings(BaseSettings):
 
     gemini_api_key: str | None = None
     gemini_chat_model: str = "gemini-1.5-flash"
-    gemini_embed_model: str = "models/text-embedding-004"
+    gemini_embed_model: str = "models/gemini-embedding-001"
 
     openai_api_key: str | None = None
     openai_chat_model: str = "gpt-4o-mini"
