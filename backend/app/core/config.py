@@ -1,16 +1,20 @@
 from functools import lru_cache
 from typing import Any
-from pydantic import Field, field_validator, model_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict, EnvSettingsSource
+from pydantic import Field, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict, EnvSettingsSource, DotEnvSettingsSource
 from pydantic.fields import FieldInfo
 
 
 class _CsvFriendlyEnvSource(EnvSettingsSource):
-    """Override decode_complex_value so CSV strings are not forced through JSON."""
-
     def prepare_field_value(self, field_name: str, field: FieldInfo, value: Any, value_is_complex: bool) -> Any:
         if field_name == "cors_origins" and isinstance(value, str):
-            # Return raw string; field_validator will split it
+            return value
+        return super().prepare_field_value(field_name, field, value, value_is_complex)
+
+
+class _CsvFriendlyDotEnvSource(DotEnvSettingsSource):
+    def prepare_field_value(self, field_name: str, field: FieldInfo, value: Any, value_is_complex: bool) -> Any:
+        if field_name == "cors_origins" and isinstance(value, str):
             return value
         return super().prepare_field_value(field_name, field, value, value_is_complex)
 
@@ -32,8 +36,13 @@ class Settings(BaseSettings):
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])
 
     @classmethod
-    def settings_customise_sources(cls, settings_cls, **kwargs):
-        return (_CsvFriendlyEnvSource(settings_cls),)
+    def settings_customise_sources(cls, settings_cls, init_settings, env_settings, dotenv_settings, file_secret_settings):
+        return (
+            init_settings,
+            _CsvFriendlyEnvSource(settings_cls),
+            _CsvFriendlyDotEnvSource(settings_cls),
+            file_secret_settings,
+        )
 
     @field_validator("cors_origins", mode="before")
     @classmethod
