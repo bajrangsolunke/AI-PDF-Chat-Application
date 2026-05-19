@@ -7,7 +7,19 @@ class Embedder(Protocol):
 
 
 def get_embedder() -> Embedder:
-    from langchain_openai import OpenAIEmbeddings
     from app.core.config import get_settings
-    settings = get_settings()
-    return OpenAIEmbeddings(model=settings.openai_embed_model, api_key=settings.openai_api_key)
+    s = get_settings()
+
+    if s.llm_provider == "gemini":
+        if not s.gemini_api_key:
+            raise RuntimeError("GEMINI_API_KEY is not set; required when LLM_PROVIDER=gemini")
+        from langchain_google_genai import GoogleGenerativeAIEmbeddings
+        return GoogleGenerativeAIEmbeddings(model=s.gemini_embed_model, google_api_key=s.gemini_api_key)
+
+    if s.llm_provider == "openai":
+        if not s.openai_api_key:
+            raise RuntimeError("OPENAI_API_KEY is not set; required when LLM_PROVIDER=openai")
+        from langchain_openai import OpenAIEmbeddings
+        return OpenAIEmbeddings(model=s.openai_embed_model, api_key=s.openai_api_key)
+
+    raise RuntimeError(f"unknown LLM_PROVIDER={s.llm_provider!r}; expected 'gemini' or 'openai'")
