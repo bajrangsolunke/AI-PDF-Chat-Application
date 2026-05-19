@@ -14,6 +14,17 @@ Be concise."""
 def build_chat_model() -> Any:
     s = get_settings()
 
+    if s.llm_provider == "groq":
+        if not s.groq_api_key:
+            raise RuntimeError("GROQ_API_KEY is not set; required when LLM_PROVIDER=groq")
+        from langchain_groq import ChatGroq
+        return ChatGroq(
+            model=s.groq_chat_model,
+            api_key=s.groq_api_key,
+            temperature=0.2,
+            streaming=True,
+        )
+
     if s.llm_provider == "gemini":
         if not s.gemini_api_key:
             raise RuntimeError("GEMINI_API_KEY is not set; required when LLM_PROVIDER=gemini")
@@ -35,7 +46,7 @@ def build_chat_model() -> Any:
             temperature=0.2,
         )
 
-    raise RuntimeError(f"unknown LLM_PROVIDER={s.llm_provider!r}; expected 'gemini' or 'openai'")
+    raise RuntimeError(f"unknown LLM_PROVIDER={s.llm_provider!r}; expected 'groq', 'gemini', or 'openai'")
 
 
 def format_context(snippets: list[dict]) -> str:

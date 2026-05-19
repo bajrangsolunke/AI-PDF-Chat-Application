@@ -11,8 +11,8 @@ A production-quality RAG chat application: upload PDFs, ask questions, get strea
 | Frontend | React 18 + Vite + TypeScript + Tailwind + Zustand + TanStack Query |
 | Backend | FastAPI + SQLAlchemy + SQLite + Alembic |
 | Vector DB | ChromaDB (persistent) |
-| LLM | Google Gemini `gemini-1.5-flash` (default, free tier) or OpenAI `gpt-4o-mini` (streamed via SSE) |
-| Embeddings | Google `text-embedding-004` (default) or OpenAI `text-embedding-3-small` |
+| LLM (chat) | Groq `llama-3.3-70b-versatile` (default — free, ~300 tok/s) — switchable to Gemini or OpenAI |
+| Embeddings | Google `text-embedding-004` (default — free) — switchable to OpenAI |
 | RAG | LangChain `RecursiveCharacterTextSplitter` + Chroma similarity search |
 | Auth | JWT (HS256), bcrypt password hashing |
 
@@ -40,9 +40,14 @@ See [docs/superpowers/specs/2026-05-19-ai-pdf-chat-design.md](docs/superpowers/s
 
 ## Prerequisites
 
-- **Google AI Studio API key (free).** Default provider is Gemini. Get a key at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) — no billing required, and the free tier comfortably covers demo use (`gemini-1.5-flash` is 15 RPM / 1500 RPD; `text-embedding-004` similar). Paste the key as `GEMINI_API_KEY` in `backend/.env`.
-- *(Optional)* OpenAI account with billing — set `LLM_PROVIDER=openai` and `OPENAI_API_KEY` if you prefer OpenAI.
-- Python 3.11+ and Node 20+ (for local dev), or Docker (for one-command run).
+Two **free** API keys, no credit card needed for either:
+
+1. **Groq API key** (for chat) — get at [console.groq.com/keys](https://console.groq.com/keys). Free tier on `llama-3.3-70b-versatile` is 30 RPM / 14,400 requests per day with ~300 tok/s streaming. Paste as `GROQ_API_KEY` in `backend/.env`.
+2. **Google AI Studio key** (for embeddings) — get at [aistudio.google.com/apikey](https://aistudio.google.com/apikey). Free tier covers demo use easily. Paste as `GEMINI_API_KEY` in `backend/.env`.
+
+*(Optional)* OpenAI is supported as an alternative — set `LLM_PROVIDER=openai` and/or `EMBED_PROVIDER=openai` with `OPENAI_API_KEY`.
+
+Python 3.11+ and Node 20+ (for local dev), or Docker (for one-command run).
 
 ## Quick start — Docker (one command)
 
@@ -81,11 +86,14 @@ npm run dev
 | Variable | Default | Description |
 |---|---|---|
 | `JWT_SECRET` | — (required) | Symmetric secret for HS256 JWTs |
-| `LLM_PROVIDER` | `gemini` | Which provider: `gemini` (free) or `openai` |
-| `GEMINI_API_KEY` | — (required if `LLM_PROVIDER=gemini`) | Google AI Studio API key |
+| `LLM_PROVIDER` | `groq` | Chat provider: `groq`, `gemini`, or `openai` |
+| `EMBED_PROVIDER` | `gemini` | Embedding provider: `gemini` or `openai` |
+| `GROQ_API_KEY` | — (required if `LLM_PROVIDER=groq`) | Groq API key (free) |
+| `GROQ_CHAT_MODEL` | `llama-3.3-70b-versatile` | Groq chat model |
+| `GEMINI_API_KEY` | — (required if either provider = `gemini`) | Google AI Studio API key (free) |
 | `GEMINI_CHAT_MODEL` | `gemini-1.5-flash` | Gemini chat model |
 | `GEMINI_EMBED_MODEL` | `models/text-embedding-004` | Gemini embedding model |
-| `OPENAI_API_KEY` | — (required if `LLM_PROVIDER=openai`) | OpenAI API key |
+| `OPENAI_API_KEY` | — (required if either provider = `openai`) | OpenAI API key |
 | `OPENAI_CHAT_MODEL` | `gpt-4o-mini` | OpenAI chat model |
 | `OPENAI_EMBED_MODEL` | `text-embedding-3-small` | Embedding model |
 | `DATABASE_URL` | `sqlite:///./app.db` | SQLAlchemy URL |

@@ -31,15 +31,21 @@ class Settings(BaseSettings):
     upload_dir: str = "./uploads"
     max_upload_mb: int = 20
 
-    llm_provider: str = "gemini"  # "gemini" or "openai"
+    # Chat provider: "groq" (default, fast + free), "gemini", or "openai"
+    llm_provider: str = "groq"
+    # Embed provider: "gemini" (default, free) or "openai". Groq does not offer embeddings.
+    embed_provider: str = "gemini"
 
-    openai_api_key: str | None = None
-    openai_chat_model: str = "gpt-4o-mini"
-    openai_embed_model: str = "text-embedding-3-small"
+    groq_api_key: str | None = None
+    groq_chat_model: str = "llama-3.3-70b-versatile"
 
     gemini_api_key: str | None = None
     gemini_chat_model: str = "gemini-1.5-flash"
     gemini_embed_model: str = "models/text-embedding-004"
+
+    openai_api_key: str | None = None
+    openai_chat_model: str = "gpt-4o-mini"
+    openai_embed_model: str = "text-embedding-3-small"
 
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])
 
