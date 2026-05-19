@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AppLayout } from "@/layouts/AppLayout";
 import { ChatSurface } from "@/components/chat/ChatSurface";
-import { UploadModal } from "@/components/pdf/UploadModal";
+import { UploadDrawer } from "@/components/pdf/UploadDrawer";
 
 export default function AppPage() {
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
@@ -11,9 +11,16 @@ export default function AppPage() {
     <>
       <AppLayout
         activeSessionId={activeSessionId}
-        onSelectSession={(id) => { setActiveSessionId(id); if (id === null) setSelectedPdfIds([]); }}
+        onSelectSession={(id) => {
+          setActiveSessionId(id);
+          if (id === null) setSelectedPdfIds([]);
+        }}
         selectedPdfIds={selectedPdfIds}
-        onTogglePdf={(id) => setSelectedPdfIds((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id])}
+        onTogglePdf={(id) =>
+          setSelectedPdfIds((prev) =>
+            prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+          )
+        }
       >
         <ChatSurface
           sessionId={activeSessionId}
@@ -21,7 +28,7 @@ export default function AppPage() {
           onSessionCreated={setActiveSessionId}
         />
       </AppLayout>
-      <UploadModal />
+      <UploadDrawer />
     </>
   );
 }

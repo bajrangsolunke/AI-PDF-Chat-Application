@@ -50,7 +50,7 @@ export function UploadModal() {
         >
           <Upload className="size-8 mx-auto text-slate-400" />
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Drag PDFs here, or</p>
-          <Button variant="secondary" className="mt-2" onClick={() => inputRef.current?.click()} disabled={upload.isPending}>
+          <Button className="mt-2" onClick={() => inputRef.current?.click()} disabled={upload.isPending}>
             {upload.isPending ? "Uploading…" : "Browse files"}
           </Button>
           <input ref={inputRef} type="file" accept="application/pdf" multiple hidden onChange={(e) => handleFiles(e.target.files)} />
