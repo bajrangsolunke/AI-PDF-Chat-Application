@@ -38,6 +38,11 @@ See [docs/superpowers/specs/2026-05-19-ai-pdf-chat-design.md](docs/superpowers/s
 - **Chat with streaming:** SSE token stream, citation chips with snippet preview, last-N message context window, multi-document retrieval.
 - **UI:** professional SaaS look — collapsible sidebar with recent chats and PDF list, status pills (processing / ready / failed), dark mode persisted across reloads, suggested questions, typing indicator, toast notifications via sonner.
 
+## Prerequisites
+
+- **OpenAI account with billing enabled.** A free OpenAI account without a payment method will return `429 insufficient_quota` on the first embedding call. Add ~$5 of credit at [platform.openai.com/settings/organization/billing](https://platform.openai.com/settings/organization/billing) — that covers many demo runs of this app since `text-embedding-3-small` and `gpt-4o-mini` are inexpensive.
+- Python 3.11+ and Node 20+ (for local dev), or Docker (for one-command run).
+
 ## Quick start — Docker (one command)
 
 ```bash
