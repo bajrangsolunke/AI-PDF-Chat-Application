@@ -91,7 +91,7 @@ export function ChatSurface({ sessionId, selectedPdfIds, onSessionCreated }: Pro
 
       {/* Message area */}
       <div ref={listRef} className="flex-1 overflow-y-auto px-8 py-8">
-        <div className="max-w-3xl">
+        <div className="max-w-4xl mx-auto">
           {empty && (
             <div className="relative">
               <div className="max-w-2xl pt-16 lg:pt-24">

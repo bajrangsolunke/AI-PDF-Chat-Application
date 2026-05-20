@@ -28,7 +28,7 @@ export function Composer({ onSend, disabled }: Props) {
 
   return (
     <div className="border-t border-rule px-8 py-6 bg-surface">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="border border-rule rounded-md focus-within:border-accent transition-colors">
           <textarea
             rows={1}
