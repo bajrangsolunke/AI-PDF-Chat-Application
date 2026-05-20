@@ -7,6 +7,10 @@ class CreateSessionRequest(BaseModel):
     title: str | None = None
 
 
+class UpdateSessionRequest(BaseModel):
+    pdf_ids: list[str]
+
+
 class ChatSessionOut(BaseModel):
     id: str
     title: str

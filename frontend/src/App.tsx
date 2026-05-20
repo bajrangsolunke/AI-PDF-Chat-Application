@@ -24,7 +24,7 @@ export default function App() {
           <Route path="/" element={<Protected><AppPage /></Protected>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-        <Toaster richColors position="top-right" />
+        <Toaster richColors position="bottom-right" theme="light" />
       </BrowserRouter>
     </QueryClientProvider>
   );

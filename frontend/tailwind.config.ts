@@ -6,13 +6,33 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          DEFAULT: "#7c3aed",
-          fg: "#ffffff",
+        bg: "var(--bg)",
+        surface: "var(--surface)",
+        ink: {
+          DEFAULT: "var(--ink)",
+          muted: "var(--ink-muted)",
+          soft: "var(--ink-soft)",
         },
+        rule: {
+          DEFAULT: "var(--rule)",
+          strong: "var(--rule-strong)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)",
+          ink: "var(--accent-ink)",
+          soft: "var(--accent-soft)",
+        },
+        good: "var(--good)",
+        warn: "var(--warn)",
+        bad: "var(--bad)",
       },
       fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui"],
+        display: ['"Fraunces"', 'ui-serif', 'Georgia', 'serif'],
+        sans: ['"Geist"', 'ui-sans-serif', 'system-ui'],
+        mono: ['"Geist Mono"', 'ui-monospace', 'monospace'],
+      },
+      borderColor: {
+        DEFAULT: "var(--rule)",
       },
     },
   },

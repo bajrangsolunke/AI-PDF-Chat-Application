@@ -26,7 +26,10 @@ export function useChatStream() {
         else if (ev.event === "error") throw new Error((evData.detail as string) ?? "stream error");
       }
     } finally {
-      qc.invalidateQueries({ queryKey: ["session", sessionId] });
+      // Refetch the session BEFORE we clear the streaming state, so the
+      // persisted messages are in the cache by the time we unmount the
+      // in-flight bubble — prevents a flicker / "messages disappear" gap.
+      await qc.refetchQueries({ queryKey: ["session", sessionId], exact: true });
       qc.invalidateQueries({ queryKey: ["sessions"] });
       setBusy(false);
       setStreaming(null);

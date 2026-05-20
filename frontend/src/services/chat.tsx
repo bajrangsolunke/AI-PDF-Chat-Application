@@ -24,6 +24,18 @@ export const useCreateSession = () => {
   });
 };
 
+export const useUpdateSessionPdfs = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vars: { sessionId: string; pdf_ids: string[] }) =>
+      (await api.patch<ChatSession>(`/chat/sessions/${vars.sessionId}`, { pdf_ids: vars.pdf_ids })).data,
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: ["session", vars.sessionId] });
+      qc.invalidateQueries({ queryKey: ["sessions"] });
+    },
+  });
+};
+
 export async function* streamChat(sessionId: string, query: string): AsyncGenerator<{ event: string; data: unknown }> {
   const token = useAuthStore.getState().token;
   const resp = await fetch(`${apiBaseUrl}/chat/stream`, {

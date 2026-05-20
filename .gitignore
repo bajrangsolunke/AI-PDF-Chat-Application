@@ -17,6 +17,8 @@ frontend/vite.config.js
 # Env & secrets
 .env
 .env.local
+.env.bak*
+*.env.bak*
 
 # App data
 backend/uploads/

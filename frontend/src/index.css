@@ -2,7 +2,114 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg: oklch(98% 0.005 75);
+  --surface: oklch(100% 0 0);
+  --ink: oklch(20% 0.02 65);
+  --ink-muted: oklch(50% 0.015 65);
+  --ink-soft: oklch(65% 0.012 65);
+  --rule: oklch(92% 0.01 75);
+  --rule-strong: oklch(85% 0.015 70);
+  --accent: oklch(58% 0.18 45);
+  --accent-ink: oklch(98% 0.01 75);
+  --accent-soft: oklch(94% 0.04 45);
+  --good: oklch(58% 0.13 145);
+  --warn: oklch(70% 0.14 70);
+  --bad: oklch(58% 0.20 25);
+}
+
+:root.dark {
+  --bg: oklch(20% 0.015 70);
+  --surface: oklch(24% 0.015 70);
+  --ink: oklch(95% 0.01 75);
+  --ink-muted: oklch(70% 0.012 65);
+  --ink-soft: oklch(55% 0.012 65);
+  --rule: oklch(30% 0.015 70);
+  --rule-strong: oklch(38% 0.015 70);
+  --accent: oklch(70% 0.16 45);
+  --accent-ink: oklch(20% 0.02 65);
+  --accent-soft: oklch(28% 0.04 45);
+}
+
 @layer base {
-  html { font-family: theme(fontFamily.sans); }
-  body { @apply bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100; }
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-ink font-sans;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+
+  h1, h2, h3 {
+    @apply font-display;
+    font-feature-settings: 'opsz' 144;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+/* Ink fade animation for streaming tokens */
+@keyframes ink-fade {
+  from { opacity: 0.3; }
+  to   { opacity: 1; }
+}
+
+.ink-fade {
+  animation: ink-fade 280ms ease-out;
+}
+
+/* Cursor blink for typing indicator */
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 0.8s steps(2) infinite;
+}
+
+/* Composer textarea auto-grow */
+.composer-textarea {
+  field-sizing: content;
+  max-height: 200px;
+  overflow-y: auto;
+  resize: none;
+}
+
+/* Themed scrollbars — automatically follow dark mode via CSS custom properties */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-strong) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--rule-strong);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--ink-soft);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
 }
