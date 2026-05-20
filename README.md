@@ -171,6 +171,21 @@ cd backend && source .venv/bin/activate && pytest -v
 
 The frontend has no unit test suite for the MVP — verification is manual against the running dev servers (see the golden-path checklist in the design spec).
 
+## RAG evaluation
+
+A retrieval/answer-quality harness lives at `backend/scripts/eval_rag.py`. Pass it a PDF and a JSON of test cases and it reports:
+
+- **Retrieval hit rate** — fraction of queries whose top-k retrieval contains a chunk from any expected page
+- **Answer keyword coverage** — fraction of answers containing all expected keywords (case-insensitive)
+- **Per-query latency** — wall-clock embed + retrieve + generate time
+
+```bash
+cd backend && source .venv/bin/activate
+python scripts/eval_rag.py path/to/paper.pdf scripts/sample_test_cases.json --out docs/EVALUATION.md
+```
+
+See [backend/scripts/README.md](backend/scripts/README.md) for the test-case format and interview-grade context on why this matters.
+
 ## What I'd add next
 
 - Postgres + production-grade Alembic migrations.
