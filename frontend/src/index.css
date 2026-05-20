@@ -83,3 +83,33 @@
   overflow-y: auto;
   resize: none;
 }
+
+/* Themed scrollbars — automatically follow dark mode via CSS custom properties */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-strong) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--rule-strong);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--ink-soft);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
