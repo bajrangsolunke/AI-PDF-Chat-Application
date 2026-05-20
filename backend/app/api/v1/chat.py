@@ -6,7 +6,7 @@ from app.core.deps import get_current_user
 from app.db.models import User
 from app.db.session import get_db
 from app.schemas.chat import (
-    ChatMessageOut, ChatSessionDetail, ChatSessionOut, CreateSessionRequest, StreamRequest,
+    ChatMessageOut, ChatSessionDetail, ChatSessionOut, CreateSessionRequest, StreamRequest, UpdateSessionRequest,
 )
 from app.services import chat_service
 
@@ -30,6 +30,20 @@ def list_sessions(db: Session = Depends(get_db), user: User = Depends(get_curren
         _, pdf_ids, _ = chat_service.get_session_with_messages(db, user.id, s.id)
         out.append(ChatSessionOut(id=s.id, title=s.title, pdf_ids=pdf_ids, created_at=s.created_at, updated_at=s.updated_at))
     return out
+
+
+@router.patch("/sessions/{session_id}", response_model=ChatSessionOut)
+def update_session(
+    session_id: str,
+    body: UpdateSessionRequest,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> ChatSessionOut:
+    session = chat_service.update_session_pdfs(db, user.id, session_id, body.pdf_ids)
+    return ChatSessionOut(
+        id=session.id, title=session.title, pdf_ids=body.pdf_ids,
+        created_at=session.created_at, updated_at=session.updated_at,
+    )
 
 
 @router.get("/sessions/{session_id}", response_model=ChatSessionDetail)

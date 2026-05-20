@@ -30,6 +30,22 @@ def list_sessions(db: Session, user_id: str) -> list[ChatSession]:
     return db.query(ChatSession).filter(ChatSession.user_id == user_id).order_by(ChatSession.updated_at.desc()).all()
 
 
+def update_session_pdfs(db: Session, user_id: str, session_id: str, pdf_ids: list[str]) -> ChatSession:
+    session = db.query(ChatSession).filter(ChatSession.id == session_id).first()
+    if not session or session.user_id != user_id:
+        raise HTTPException(status_code=404, detail="session not found")
+    owned = db.query(Pdf.id).filter(Pdf.user_id == user_id, Pdf.id.in_(pdf_ids)).all()
+    owned_ids = {row[0] for row in owned}
+    if owned_ids != set(pdf_ids):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="one or more PDFs not found")
+    db.query(SessionPdf).filter(SessionPdf.session_id == session_id).delete()
+    for pid in pdf_ids:
+        db.add(SessionPdf(session_id=session_id, pdf_id=pid))
+    db.commit()
+    db.refresh(session)
+    return session
+
+
 def get_session_with_messages(db: Session, user_id: str, session_id: str) -> tuple[ChatSession, list[str], list[ChatMessage]]:
     session = db.query(ChatSession).filter(ChatSession.id == session_id).first()
     if not session or session.user_id != user_id:
