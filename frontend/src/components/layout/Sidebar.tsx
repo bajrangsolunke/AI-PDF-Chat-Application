@@ -3,7 +3,7 @@ import { useSessions } from "@/services/chat";
 import { useAuthStore } from "@/store/authStore";
 import { useUiStore } from "@/store/uiStore";
 import { PdfList } from "@/components/pdf/PdfList";
-import { Wordmark } from "@/components/brand/Logo";
+import { WordmarkWithLogo } from "@/components/brand/Logo";
 import { cn } from "@/lib/cn";
 
 interface SidebarProps {
@@ -27,7 +27,7 @@ export function Sidebar({
     <aside className="w-72 shrink-0 border-r border-rule flex flex-col h-screen bg-surface">
       {/* Top bar: wordmark + new chat */}
       <div className="px-5 pt-5 pb-3 flex items-center justify-between">
-        <Wordmark className="text-lg" />
+        <WordmarkWithLogo />
         <button
           className="text-sm text-ink hover:text-accent inline-flex items-center gap-2 transition-colors"
           onClick={() => onSelectSession(null)}
