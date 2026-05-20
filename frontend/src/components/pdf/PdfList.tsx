@@ -37,15 +37,14 @@ export function PdfList({
 
         return (
           <li key={p.id} className="relative group">
-            {/* Left accent strip for selected */}
-            {selected && (
-              <span className="absolute left-0 top-0 h-full w-0.5 bg-accent rounded-full" />
-            )}
             <button
               className={cn(
                 "w-full text-left pl-3 pr-2 py-1.5 flex items-center gap-2 transition-colors",
+                selected
+                  ? "text-ink bg-accent-soft/30 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[2px] before:bg-accent"
+                  : "hover:bg-bg",
                 isFailed && "text-ink-muted opacity-70",
-                !isFailed && "text-ink hover:text-ink",
+                !isFailed && !selected && "text-ink",
               )}
               onClick={() => isReady && onToggle(p.id)}
               title={

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AppLayout } from "@/layouts/AppLayout";
 import { ChatSurface } from "@/components/chat/ChatSurface";
 import { UploadDrawer } from "@/components/pdf/UploadDrawer";
+import { SourcePanel } from "@/components/chat/SourcePanel";
 
 export default function AppPage() {
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
@@ -29,6 +30,7 @@ export default function AppPage() {
         />
       </AppLayout>
       <UploadDrawer />
+      <SourcePanel />
     </>
   );
 }

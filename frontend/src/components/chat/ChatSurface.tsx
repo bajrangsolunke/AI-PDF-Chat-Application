@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
+import { Upload } from "lucide-react";
 import { useSession, useCreateSession } from "@/services/chat";
 import { usePdfs } from "@/services/pdfs";
 import { useChatStream } from "@/hooks/useChatStream";
@@ -9,6 +10,8 @@ import { SuggestedQuestions } from "./SuggestedQuestions";
 import { Composer } from "./Composer";
 import { CitationsBlock } from "./CitationChip";
 import { TopographyMark } from "@/components/brand/TopographyMark";
+import { Button } from "@/components/ui/Button";
+import { useUiStore } from "@/store/uiStore";
 
 interface Props {
   sessionId: string | null;
@@ -46,6 +49,7 @@ export function ChatSurface({ sessionId, selectedPdfIds, onSessionCreated }: Pro
   }
 
   const empty = !sessionId || (session && session.messages.length === 0);
+  const noPdfs = allPdfs.length === 0;
 
   // Build a reading context label from session pdf_ids
   const readingPdfs = session?.pdf_ids
@@ -89,21 +93,50 @@ export function ChatSurface({ sessionId, selectedPdfIds, onSessionCreated }: Pro
       <div ref={listRef} className="flex-1 overflow-y-auto px-8 py-8">
         <div className="max-w-3xl">
           {empty && (
-            <div className="relative pt-16 lg:pt-24">
-              <div className="max-w-2xl">
-                <h3
-                  className="font-display text-4xl lg:text-5xl text-ink leading-tight"
-                  style={{ fontFeatureSettings: "'opsz' 144" }}
-                >
-                  Read first, then ask<span className="text-accent">.</span>
-                </h3>
-                <p className="mt-3 text-base text-ink-muted leading-relaxed max-w-[52ch]">
-                  Atlas reads the documents you upload and cites every claim. Pick
-                  a document from the library, then ask your first question.
-                </p>
-                <div className="mt-16">
-                  <SuggestedQuestions onPick={handleSend} />
-                </div>
+            <div className="relative">
+              <div className="max-w-2xl pt-16 lg:pt-24">
+                {noPdfs ? (
+                  <>
+                    <h1
+                      className="font-display text-4xl lg:text-5xl text-ink leading-[1.1] tracking-tight"
+                      style={{ fontFeatureSettings: "'opsz' 144" }}
+                    >
+                      Add your first document<span className="text-accent">.</span>
+                    </h1>
+                    <p className="text-ink-muted mt-6 max-w-[52ch] leading-relaxed">
+                      Atlas reads PDFs and answers from the text — every claim is cited.
+                      Start by adding a document to your library.
+                    </p>
+                    <div className="mt-10 inline-flex flex-col gap-3 items-start">
+                      <Button
+                        onClick={() => useUiStore.getState().setUploadOpen(true)}
+                        className="inline-flex items-center gap-2"
+                      >
+                        <Upload className="size-4" />
+                        Add document
+                      </Button>
+                      <p className="text-[10px] font-mono uppercase tracking-[0.15em] text-ink-soft">
+                        PDF · up to 20 MB
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h1
+                      className="font-display text-4xl lg:text-5xl text-ink leading-[1.1] tracking-tight"
+                      style={{ fontFeatureSettings: "'opsz' 144" }}
+                    >
+                      Read first, then ask<span className="text-accent">.</span>
+                    </h1>
+                    <p className="text-ink-muted mt-6 max-w-[52ch] leading-relaxed">
+                      Atlas reads the documents you upload and cites every claim. Pick a document
+                      from the library, then ask your first question.
+                    </p>
+                    <div className="mt-16">
+                      <SuggestedQuestions onPick={handleSend} />
+                    </div>
+                  </>
+                )}
               </div>
               <TopographyMark className="absolute right-0 -bottom-24 size-[480px] text-accent/15 pointer-events-none hidden lg:block" />
             </div>

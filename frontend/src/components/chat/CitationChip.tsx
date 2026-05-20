@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Citation } from "@/types/api";
 import { cn } from "@/lib/cn";
+import { useUiStore } from "@/store/uiStore";
 
 /** Inline superscript — used when rendering [n] markers in text */
 export function CitationInline({
@@ -11,6 +12,7 @@ export function CitationInline({
   citation: Citation;
 }) {
   const [open, setOpen] = useState(false);
+  const { setActiveCitation } = useUiStore();
 
   return (
     <span className="relative inline-block">
@@ -18,7 +20,7 @@ export function CitationInline({
         className="text-[0.7em] font-mono text-accent hover:underline cursor-pointer"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => { setActiveCitation(citation, idx); setOpen(false); }}
         title={`${citation.filename}, page ${citation.page}`}
       >
         {idx}
@@ -58,33 +60,29 @@ function CitationFootnote({
   idx: number;
   citation: Citation;
 }) {
-  const [open, setOpen] = useState(false);
+  const { setActiveCitation } = useUiStore();
 
   return (
     <li className="relative">
       <button
         className={cn(
-          "text-xs text-ink-muted font-sans text-left flex items-baseline gap-1 hover:text-ink transition-colors",
+          "text-left text-xs text-ink-muted hover:text-ink font-sans block w-full transition-colors",
         )}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setActiveCitation(citation, idx)}
       >
-        <sup className="font-mono text-accent">{idx}</sup>
-        <span>
-          {citation.filename}, page {citation.page}
-        </span>
+        <span className="font-mono text-accent">{toSuperscript(idx)}</span>{" "}
+        {citation.filename}, page {citation.page}
       </button>
-      {open && (
-        <div className="absolute z-20 left-0 top-6 w-80 text-ink text-sm bg-surface border border-rule p-3 leading-relaxed">
-          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted mb-1 truncate">
-            {citation.filename} · p.{citation.page}
-          </p>
-          <p className="text-ink-muted line-clamp-6">{citation.snippet}</p>
-        </div>
-      )}
     </li>
   );
+}
+
+function toSuperscript(n: number): string {
+  const sups = ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"];
+  return String(n)
+    .split("")
+    .map((d) => sups[parseInt(d)] ?? d)
+    .join("");
 }
 
 /** Legacy export for any remaining usages — renders inline chip */

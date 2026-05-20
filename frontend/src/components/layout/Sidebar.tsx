@@ -46,23 +46,17 @@ export function Sidebar({
       </div>
       <ul className="px-3 mt-1 space-y-0.5 max-h-48 overflow-y-auto">
         {sessions.map((s) => (
-          <li key={s.id} className="relative">
-            {/* Left accent strip for active */}
-            {activeSessionId === s.id && (
-              <span className="absolute left-0 top-0 h-full w-0.5 bg-accent rounded-full" />
+          <li
+            key={s.id}
+            className={cn(
+              "relative pl-3 pr-2 py-1.5 text-sm cursor-pointer transition-colors truncate",
+              activeSessionId === s.id
+                ? "text-ink bg-accent-soft/30 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[2px] before:bg-accent"
+                : "text-ink-muted hover:text-ink hover:bg-bg",
             )}
-            <button
-              className={cn(
-                "w-full text-left pl-3 pr-2 py-1.5 text-sm truncate transition-colors",
-                activeSessionId === s.id
-                  ? "text-ink"
-                  : "text-ink-muted hover:text-ink",
-                "hover:underline underline-offset-2",
-              )}
-              onClick={() => onSelectSession(s.id)}
-            >
-              {s.title}
-            </button>
+            onClick={() => onSelectSession(s.id)}
+          >
+            {s.title}
           </li>
         ))}
         {sessions.length === 0 && (
