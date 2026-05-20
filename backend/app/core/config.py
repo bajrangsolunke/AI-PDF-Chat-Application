@@ -1,0 +1,48 @@
+from functools import lru_cache
+from typing import Any
+from pydantic import Field, field_validator, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict, EnvSettingsSource
+from pydantic.fields import FieldInfo
+
+
+class _CsvFriendlyEnvSource(EnvSettingsSource):
+    """Override decode_complex_value so CSV strings are not forced through JSON."""
+
+    def prepare_field_value(self, field_name: str, field: FieldInfo, value: Any, value_is_complex: bool) -> Any:
+        if field_name == "cors_origins" and isinstance(value, str):
+            # Return raw string; field_validator will split it
+            return value
+        return super().prepare_field_value(field_name, field, value, value_is_complex)
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    app_env: str = "development"
+    jwt_secret: str
+    jwt_alg: str = "HS256"
+    jwt_expires_min: int = 60
+    database_url: str = "sqlite:///./app.db"
+    chroma_dir: str = "./chroma"
+    upload_dir: str = "./uploads"
+    max_upload_mb: int = 20
+    openai_api_key: str
+    openai_chat_model: str = "gpt-4o-mini"
+    openai_embed_model: str = "text-embedding-3-small"
+    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])
+
+    @classmethod
+    def settings_customise_sources(cls, settings_cls, **kwargs):
+        return (_CsvFriendlyEnvSource(settings_cls),)
+
+    @field_validator("cors_origins", mode="before")
+    @classmethod
+    def split_cors(cls, v):
+        if isinstance(v, str):
+            return [o.strip() for o in v.split(",") if o.strip()]
+        return v
+
+
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()
