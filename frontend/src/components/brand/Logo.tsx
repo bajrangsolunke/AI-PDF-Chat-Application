@@ -6,7 +6,7 @@ export function Wordmark({ className }: { className?: string }) {
       className={cn("font-display font-medium tracking-tight text-ink", className)}
       style={{ fontFeatureSettings: "'opsz' 144" }}
     >
-      Atlas
+      <span className="text-accent">A</span>tlas
     </span>
   );
 }

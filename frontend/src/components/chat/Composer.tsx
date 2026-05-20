@@ -43,7 +43,7 @@ export function Composer({ onSend, disabled }: Props) {
             onChange={(e) => setText(e.target.value)}
             onKeyDown={onKeyDown}
             placeholder="Ask a question about your documents…"
-            className="composer-textarea flex-1 bg-transparent border-b border-transparent focus:border-accent focus:outline-none text-ink placeholder:text-ink-soft text-base py-1 transition-colors"
+            className="composer-textarea resize-none flex-1 bg-transparent border-b border-transparent focus:border-accent focus:outline-none text-ink placeholder:text-ink-soft text-base py-1 transition-colors"
             disabled={disabled}
           />
           {text.trim() && (

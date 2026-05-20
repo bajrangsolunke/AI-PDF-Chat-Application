@@ -90,26 +90,31 @@ export function Sidebar({
       </div>
 
       {/* Bottom user bar */}
-      <div className="border-t border-rule px-5 py-3 flex items-center justify-between">
-        <span className="text-xs text-ink-muted font-sans truncate max-w-[140px]">
-          {user?.email}
-        </span>
-        <div className="flex items-center gap-2">
-          <button
-            className="text-ink-soft hover:text-accent transition-colors p-1"
-            onClick={toggleDarkMode}
-            title="Toggle theme"
-          >
-            {darkMode ? <Sun className="size-3.5" /> : <Moon className="size-3.5" />}
-          </button>
-          <button
-            className="text-ink-soft hover:text-accent transition-colors p-1"
-            onClick={logout}
-            title="Log out"
-          >
-            <LogOut className="size-3.5" />
-          </button>
+      <div className="border-t border-rule px-5 p-4">
+        <div className="flex items-center justify-between">
+          <span className="text-xs text-ink-muted font-sans truncate max-w-[140px]">
+            {user?.email}
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              className="text-ink-soft hover:text-accent transition-colors p-1"
+              onClick={toggleDarkMode}
+              title="Toggle theme"
+            >
+              {darkMode ? <Sun className="size-3.5" /> : <Moon className="size-3.5" />}
+            </button>
+            <button
+              className="text-ink-soft hover:text-accent transition-colors p-1"
+              onClick={logout}
+              title="Log out"
+            >
+              <LogOut className="size-3.5" />
+            </button>
+          </div>
         </div>
+        <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-ink-soft pt-3">
+          Powered by Groq · Gemini
+        </p>
       </div>
     </aside>
   );
