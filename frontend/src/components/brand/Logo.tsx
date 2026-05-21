@@ -11,6 +11,27 @@ export function Wordmark({ className }: { className?: string }) {
   );
 }
 
+export function WordmarkWithLogo({
+  className,
+  logoHeight = 36,
+}: {
+  className?: string;
+  logoHeight?: number;
+}) {
+  return (
+    <span className={cn("inline-flex items-center gap-2.5", className)}>
+      <img
+        src="/logo.png"
+        alt=""
+        aria-hidden="true"
+        style={{ height: logoHeight, width: "auto" }}
+        className="object-contain shrink-0"
+      />
+      <Wordmark className="text-lg" />
+    </span>
+  );
+}
+
 export function WordmarkBlock({ subtitle }: { subtitle?: string }) {
   return (
     <div className="space-y-1.5">

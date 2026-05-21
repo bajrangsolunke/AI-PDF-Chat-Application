@@ -186,6 +186,11 @@ python scripts/eval_rag.py path/to/paper.pdf scripts/sample_test_cases.json --ou
 
 See [backend/scripts/README.md](backend/scripts/README.md) for the test-case format and interview-grade context on why this matters.
 
+## Documentation
+
+- [Architecture deep-dive](docs/ARCHITECTURE.md) — system design, RAG pipeline detail, data model, design system, trade-offs, and scale considerations.
+- [Interview Q&A](docs/INTERVIEW_QA.md) — questions a Gen-AI engineer interviewer is likely to ask about this project, with project-specific answers.
+
 ## What I'd add next
 
 - Postgres + production-grade Alembic migrations.
